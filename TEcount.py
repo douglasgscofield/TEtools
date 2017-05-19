@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*-coding:Utf-8 -*
 
 # Copyright (C) 2015 Laurent Modolo
@@ -41,9 +41,7 @@ if not path.isfile(tools_path+'TEcount.ini'):
     print("'TEcount.ini' file not found, writing default one.")
     config['programs'] = {'urqt': tools_path+'UrQt',
                           'bowtie': tools_path+'bowtie/bowtie',
-                          'bowtie2': tools_path+'bowtie2/bowtie2',
-                          'sirna_size': '21',
-                          'thread': '4'}
+                          'bowtie2': tools_path+'bowtie2/bowtie2'}
     with open(tools_path+'TEcount.ini', 'w') as configfile:
         config.write(configfile)
 config.read(tools_path+'TEcount.ini')
@@ -60,13 +58,19 @@ parser.add_argument('-QC', action='store_true', dest='quality_control', default=
 parser.add_argument('-rosette', action='store', dest='rosette_file', help='Rosette file for TE name')
 parser.add_argument('-column', action='store', dest='count_column', default=2, help='Rosette column to group count')
 parser.add_argument('-count', action='store', dest='count_file', default=None, help='output count file')
-parser.add_argument('-siRNA', action='store', dest='count_sirna_file', default=None, help='ouptput siRNA count file: store siRNA count (21bp) in another file than piRNA (other size), this option is not compatible with -QC')
+parser.add_argument('-siRNA', action='store', dest='count_sirna_file', default=None, help='ouptput siRNA count file: store siRNA count (21bp by default) in another file than piRNA (other size), this option is not compatible with -QC')
+parser.add_argument('-sirna_size', action='store', dest='sirna_size', default=21, help='siRNA size (default 21), moved from the TEcount.ini file (UPPMAX)')
+parser.add_argument('-thread', action='store', dest='thread', default=3, help='number of threads (default 3), the default will fill a single core, moved from the TEcount.ini file (UPPMAX)')
 parser.add_argument('-version', action='store_true', dest='version', default=False, help='print version')
 args = parser.parse_args()
 
 if args.version:
     print("1.0.0")
     exit(0)
+
+# moved from TEcount.ini to arguments, now add back to config[] (UPPMAX)
+config['programs']['sirna_size'] = args.sirna_size
+config['programs']['thread'] = args.thread
 
 # subprosses management
 

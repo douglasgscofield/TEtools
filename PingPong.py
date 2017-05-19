@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*-coding:Utf-8 -*
 
 # Copyright (C) 2015 Laurent Modolo
@@ -33,10 +33,8 @@ tools_path = path.realpath(__file__)[:-len('PingPong.py')]
 config = configparser.ConfigParser()
 if not path.isfile(tools_path+'PingPong.ini'):
     print("'PingPong.ini' file not found, writing default one.")
-    config['programs'] = {'pingpongpro' : tools_path+'pingpongpro/pingpongpr',
+    config['programs'] = {'pingpongpro' : tools_path+'pingpongpro/pingpongpro',
                           'bowtie' : tools_path+'bowtie/bowtie',
-                          'min-alignment-length' : '10',
-                          'max-alignment-length' : '40',
                           'TE_file' : 'pingpong_working_directory/TE.fasta',
                           'csv_file' : 'pingpong_working_directory/TE.csv',
                           'sam_file' : 'pingpong_working_directory/TE.sam',
@@ -52,11 +50,18 @@ parser.add_argument('-fastqs', action='store', dest='fastq_files', help='RNA sam
 parser.add_argument('-fasta', action='store', dest='fasta_file', default = None, help='TE sequence fasta file')
 parser.add_argument('-TE_names', action='store', dest='TE_names', default=500, help='names of the TE family to check', nargs='*')
 parser.add_argument('-version', action='store_true', default=False, dest='version', help='print version')
+parser.add_argument('-min-alignment-length', action='store', default=10, dest='min_alignment_length', help='min alignment length, moved from config (UPPMAX)')
+parser.add_argument('-max-alignment-length', action='store', default=40, dest='max_alignment_length', help='max alignment length, moved from config (UPPMAX)')
+parser.add_argument('-thread', action='store', default=1, dest='thread', help='number of threads for bowtie, moved from config (UPPMAX)')
 args = parser.parse_args()
 
 if args.version:
     print("1.0.0")
     exit(0)
+
+config['programs']['min-alignment-length'] = args.min_alignment_length
+config['programs']['max-alignment-length'] = args.max_alignment_length
+config['programs']['thread'] = args.thread
 
 class Pingpong:
     procs = list()
