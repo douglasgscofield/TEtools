@@ -38,8 +38,7 @@ if not path.isfile(tools_path+'PingPong.ini'):
                           'TE_file' : 'pingpong_working_directory/TE.fasta',
                           'csv_file' : 'pingpong_working_directory/TE.csv',
                           'sam_file' : 'pingpong_working_directory/TE.sam',
-                          'output_folder' : 'pingpong_working_directory/',
-                          'thread' : '4'
+                          'output_folder' : 'pingpong_working_directory/'
                          }
     with open(tools_path+'PingPong.ini', 'w') as configfile:
         config.write(configfile)
